@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="game.css">
+</head>
+<body>
+    <audio src="In-Game_audio.wav" controls loop></audio>
+    <div id="game-container">
+        <div id="level-Up">
+            <p id="level-text">LEVEL: <span id="level-value">1</span></p>
+        </div>
+        <div id="game">
+            <p id="score_cnt">Score:  <span id="score">0</span></p>
+            <img src="rocket2.png" id="player"></div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+    <div id="overlay">
+        <div class="modal">
+            <div class="modal-text">
+                <br><br>
+                <h1><strong>Score: <span id="modal-score"></span></span></strong></h1>
+                <h2><strong>Level: <span id="modal-level-value"></span></strong></h2>
+            </div>
+            <a style="text-decoration:none"></a>
+            <button id="restart" class="button" onclick="restart()">Restart</button>
+        </div>
+    </div>
+</body>
+</html>

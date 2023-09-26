@@ -100,3 +100,14 @@ body{
 #level-value {
     font-weight: bold;
 }
+.laser {
+    position: absolute;
+    width: 5px;
+    height: 15px;
+    background: red;
+}
+@keyframes explode {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+

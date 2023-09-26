@@ -158,6 +158,101 @@ function animate() { //animate function
 }
 
 animate();
+// New JavaScript code with laser shooting feature
+
+var speed = 0; // Initialize speed
+var isShooting = false; // Flag to track if the laser button is held down
+var laserCooldown = 1000; // Delay between laser shots (1 second)
+var lastShotTime = 0; // Timestamp of the last laser shot
+
+// Handle rocket movement using arrow keys
+window.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowLeft') {
+        speed = -player_speed; // Move left
+    } else if (event.key === 'ArrowRight') {
+        speed = player_speed; // Move right
+    }
+});
+
+window.addEventListener('keyup', function(event) {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        speed = 0; // Stop moving when key is released
+    }
+});
+
+function animate() {
+    var left = player.offsetLeft;
+    player.style.left = Math.max(Math.min(left + speed, game.offsetWidth - player.offsetWidth), 0) + 'px';
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// Function to create lasers
+function createLaser() {
+    var laser = document.createElement('div');
+    laser.classList.add('laser');
+    game.appendChild(laser);
+    laser.style.left = (player.offsetLeft + player.offsetWidth / 2) + 'px';
+    laser.style.top = player.offsetTop + 'px';
+    return laser;
+}
+
+// Function to move lasers and check for collisions with asteroids
+function moveLaser(laser) {
+    function step() {
+        if (laser) {
+            laser.style.top = (laser.offsetTop - 5) + 'px';
+        }
+        if (laser && laser.offsetTop < 0) {
+            laser.remove();
+        } else if (laser) {
+            let enemies = document.querySelectorAll('.enemy');
+            let hitEnemy = false;
+            enemies.forEach(enemy => {
+                if (laser && enemy && isColliding(laser, enemy)) {
+                    // Asteroid hit by a laser
+                    laser.remove();
+                    enemy.style.animation = 'explode 0.5s'; // Cool explosion animation
+                    setTimeout(() => {
+                        enemy.remove();
+                    }, 500);
+                    // Increase score or perform other actions here
+                    hitEnemy = true;
+                }
+            });
+            if (hitEnemy) {
+                return; // Don't continue checking if an enemy was hit
+            } else {
+                requestAnimationFrame(step);
+            }
+        }
+    }
+    step();
+}
+
+// Handle laser shooting when the Space key is pressed
+window.addEventListener('keydown', function(event) {
+    if (event.code === 'Space') {
+        if (!isShooting) {
+            isShooting = true;
+            var currentTime = Date.now();
+            if (currentTime - lastShotTime >= laserCooldown) {
+                lastShotTime = currentTime;
+                var laser = createLaser();
+                moveLaser(laser);
+            }
+        }
+    }
+});
+
+// Stop shooting when the Space key is released
+window.addEventListener('keyup', function(event) {
+    if (event.code === 'Space') {
+        isShooting = false;
+    }
+});
+
 
 // Start the main music
 mainMusic.play();
